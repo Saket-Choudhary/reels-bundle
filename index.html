@@ -3,23 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reels Bundle – ₹199 Only</title>
+  <title>Reel Bundles</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
-<body class="bg-orange-50 text-gray-800">
-
-  <div class="flex items-center justify-center min-h-screen">
-    <div class="bg-white shadow-xl rounded-2xl p-8 max-w-md text-center">
-      <h1 class="text-3xl font-bold text-orange-500 mb-4">🔥 Viral Reels Bundle – June 2025</h1>
-      <p class="mb-4 text-lg">Get 150+ trending Instagram reels. Instant download after payment.</p>
-      <h2 class="text-2xl font-semibold mb-6">₹199 Only</h2>
-      <button id="buyNowBtn" class="bg-orange-500 hover:bg-orange-600 text-white text-lg px-6 py-3 rounded-full transition-all duration-300 shadow-md">
-        Buy Now
-      </button>
+<body class="bg-orange-50 text-gray-900">
+  <div class="max-w-6xl mx-auto py-10 px-4">
+    <h1 class="text-4xl font-bold mb-8 text-center text-orange-500">🔥 Trending Reels Bundles</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="productList"></div>
+    <div class="text-center mt-10">
+      <a href="cart.html">
+        <button class="bg-orange-600 text-white px-6 py-3 rounded-full text-lg hover:bg-orange-700">🛒 Go to Cart</button>
+      </a>
     </div>
   </div>
+  <script src="data.js"></script>
+  <script>
+    const productList = document.getElementById('productList');
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-  <script src="script.js"></script>
+    bundles.forEach((bundle, index) => {
+      const card = document.createElement('div');
+      card.className = "bg-white p-4 rounded-xl shadow hover:shadow-lg transition";
+      card.innerHTML = `
+        <img src="${bundle.image}" alt="${bundle.name}" class="w-full h-48 object-cover rounded-md mb-4">
+        <h2 class="text-xl font-semibold mb-2">${bundle.name}</h2>
+        <p class="text-orange-600 font-bold mb-4">₹${bundle.price}</p>
+        <button onclick="addToCart(${index})" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full w-full">Add to Cart</button>
+      `;
+      productList.appendChild(card);
+    });
+
+    function addToCart(index) {
+      cart.push(bundles[index]);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert("Added to cart!");
+    }
+  </script>
 </body>
 </html>
