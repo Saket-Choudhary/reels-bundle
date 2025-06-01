@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="max-w-3xl mx-auto py-10 px-4">
+    <h1 class="text-3xl font-bold mb-6 text-center">🛒 Your Cart</h1>
+    <div id="cartItems" class="space-y-4"></div>
+    <h2 class="text-xl font-semibold mt-6">Total: ₹<span id="totalPrice">0</span></h2>
+    <button onclick="payNow()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 mt-6 rounded-full text-lg">Pay Now</button>
+  </div>
+  <script>
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartItems = document.getElementById('cartItems');
+    let total = 0;
+
+    cart.forEach((item) => {
+      const div = document.createElement('div');
+      div.className = "bg-white p-4 shadow rounded-xl";
+      div.innerHTML = `<div class="flex justify-between"><span>${item.name}</span><span>₹${item.price}</span></div>`;
+      cartItems.appendChild(div);
+      total += item.price;
+    });
+
+    document.getElementById('totalPrice').textContent = total;
+
+    function payNow() {
+      const options = {
+        key: "YOUR_RAZORPAY_KEY_HERE",
+        amount: total * 100,
+        currency: "INR",
+        name: "Reels Store",
+        description: "Digital Reels Bundle",
+        handler: function (response) {
+          localStorage.removeItem('cart');
+          window.location.href = "thankyou.html";
+        },
+        prefill: {
+          name: "",
+          email: "",
+          contact: ""
+        },
+        theme: {
+          color: "#38a169"
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    }
+  </script>
+</body>
+</html>
